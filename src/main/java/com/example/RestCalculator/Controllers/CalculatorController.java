@@ -1,21 +1,19 @@
 package com.example.RestCalculator.Controllers;
 
 import com.example.RestCalculator.service.CalculatorService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "/api", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 public class CalculatorController {
 
     private final CalculatorService calculatorService;
@@ -30,14 +28,36 @@ public class CalculatorController {
     }
 
     @PostMapping("/max")
-    public int calculation(@RequestParam("reader") MultipartFile reader) throws IOException {
-        calculatorService.getListNumbersFromFile(getStringFromFile(reader));
-        return 1;
+    public int getMaxNumberInFile(@RequestParam("reader") MultipartFile reader) throws IOException {
+        if (reader != null)
+            return calculatorService.getMaxValue(getStringFromFile(reader));
+        else return 0;
+
     }
 
     @PostMapping("/min")
-    public int calculationa(@RequestParam("reader") MultipartFile reader) throws IOException {
-        return 1;
+    public int getMinNumberInFile(@RequestParam("reader") MultipartFile reader) throws IOException {
+        return calculatorService.getMinValue(getStringFromFile(reader));
+    }
+
+    @PostMapping("/median")
+    public double getMedian(@RequestParam("reader") MultipartFile reader) throws IOException {
+        return calculatorService.getMedian(getStringFromFile(reader));
+    }
+
+    @PostMapping("/average")
+    public double getAverage(@RequestParam("reader") MultipartFile reader) throws IOException {
+        return calculatorService.getAverage(getStringFromFile(reader));
+    }
+
+    @PostMapping("/ascending")
+    public List<Integer> getAscendingSequence(@RequestParam("reader") MultipartFile reader) throws IOException {
+        return calculatorService.getAscendingSequence(getStringFromFile(reader));
+    }
+
+    @PostMapping("/descending")
+    public List<Integer> getDescendingSequence(@RequestParam("reader") MultipartFile reader) throws IOException {
+        return calculatorService.getDescendingSequence(getStringFromFile(reader));
     }
 
     private StringBuilder getStringFromFile(MultipartFile reader) throws IOException {

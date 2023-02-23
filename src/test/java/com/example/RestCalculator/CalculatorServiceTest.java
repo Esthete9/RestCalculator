@@ -33,4 +33,41 @@ public class CalculatorServiceTest {
 
         Assertions.assertEquals(expected, actual);
     }
+
+    @Test
+    public void getMax_shouldReturnMaxValue() {
+        StringBuilder stringBuilder = new StringBuilder("12 13 15 1 2 3 4 5 6 3 2 4 3 2 14 11 10 2 1");
+        int actual = 15;
+        int expected = calculatorService.getMaxValue(stringBuilder);
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getMin_shouldReturnMinValue() {
+        StringBuilder stringBuilder = new StringBuilder("12 -13 15 1 2 3 4 5 6 3 2 4 3 2 14 11 10 2 1");
+        int actual = -13;
+        int expected = calculatorService.getMinValue(stringBuilder);
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getAverage_shouldReturnAverage() {
+        StringBuilder stringBuilder = new StringBuilder("-10 11 1 -2 4 9 5");
+        double actual = 6.0;
+        double expected = calculatorService.getAverage(stringBuilder);
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getMedian_shouldReturnMedian() {
+        StringBuilder stringBuilder = new StringBuilder("12 13 11 1 2 2");
+        double actual = 6.0;
+        double expected = calculatorService.getMedian(stringBuilder);
+
+        Assertions.assertEquals(expected, actual);
+    }
+
 }

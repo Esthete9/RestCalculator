@@ -1,10 +1,7 @@
 package com.example.RestCalculator.service;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.io.FileReader;
-import java.lang.reflect.InaccessibleObjectException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -18,7 +15,7 @@ public class CalculatorService {
     }
 
     public List<Integer> getListNumbersFromFile(StringBuilder stringBuilder) {
-        Pattern pattern = Pattern.compile("\\d+");
+        Pattern pattern = Pattern.compile("-\\d+|\\d+");
         Matcher matcher = pattern.matcher(stringBuilder);
         String res = "";
 
@@ -43,20 +40,24 @@ public class CalculatorService {
         return getListNumbersFromFile(stringBuilder).stream().min(Comparator.naturalOrder()).get();
     }
 
-    public int getMedian(StringBuilder stringBuilder) {
-        int median = 0;
+    public double getMedian(StringBuilder stringBuilder) {
+        double median;
         List<Integer> numbers = getListNumbersFromFile(stringBuilder);
         if (numbers.size() % 2 == 0)
-            median = (numbers.get(numbers.size() / 2) + numbers.get((numbers.size() / 2) - 1)) / numbers.size();
+            median = (numbers.get(numbers.size() / 2) + numbers.get((numbers.size() / 2) - 1)) / 2;
             else
                 median = numbers.get(numbers.size() / 2);
             return median;
     }
 
-    public int getAverage(StringBuilder stringBuilder) {
-        int sum = 0;
-        for (var val : getListNumbersFromFile(stringBuilder))
-            sum += val;
+    public double getAverage(StringBuilder stringBuilder) {
+        double sum = 0;
+        for (var val : getListNumbersFromFile(stringBuilder)) {
+            if (val < 0)
+                sum += Math.abs(val);
+            else
+                sum += val;
+        }
         return sum / getListNumbersFromFile(stringBuilder).size();
     }
 
