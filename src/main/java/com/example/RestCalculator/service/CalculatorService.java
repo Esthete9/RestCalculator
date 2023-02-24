@@ -1,5 +1,6 @@
 package com.example.RestCalculator.service;
 
+import com.example.RestCalculator.exceptions.FileNotFoundNumbersException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,14 +15,19 @@ public class CalculatorService {
     public CalculatorService() {
     }
 
-    public List<Integer> getListNumbersFromFile(StringBuilder stringBuilder) {
+    public List<Integer> getListNumbersFromFile(StringBuilder textFromFile) {
         Pattern pattern = Pattern.compile("-\\d+|\\d+");
-        Matcher matcher = pattern.matcher(stringBuilder);
+        Matcher matcher = pattern.matcher(textFromFile);
         String res = "";
 
         while (matcher.find()) {
             res += matcher.group() + " ";
         }
+
+        if (res.isEmpty()) {
+            throw new FileNotFoundNumbersException("В переданном файле нет чисел!");
+        }
+
         String[] strArr = res.split(" ");
 
         List<Integer> integerList = new ArrayList<>();
@@ -29,6 +35,7 @@ public class CalculatorService {
         for (var str : strArr) {
            integerList.add(Integer.parseInt(str));
         }
+        System.out.println(integerList.toString());
         return integerList;
     }
 

@@ -1,14 +1,17 @@
 package com.example.RestCalculator;
 
+import com.example.RestCalculator.exceptions.FileNotFoundNumbersException;
 import com.example.RestCalculator.service.CalculatorService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class CalculatorServiceTest {
@@ -16,56 +19,74 @@ public class CalculatorServiceTest {
     @Autowired
     private CalculatorService calculatorService;
 
+    private static StringBuilder textFromFile;
+    private static List<Integer> actual;
+
+    @BeforeAll
+    public static void setUp() {
+        textFromFile = new StringBuilder("test12test test13 11test 1 3 -2");
+    }
+
+
+    @Test
+    public void getListNumbersFromFile_shouldReturnListNumbers() {
+        List<Integer> actual = new ArrayList<>(List.of(12, 13, 11, 1, 3, -2));
+        List<Integer> expected = calculatorService.getListNumbersFromFile(textFromFile);
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getListNumbersFromFile_shouldTrowException() {
+        StringBuilder text = new StringBuilder("test");
+        assertThrows(FileNotFoundNumbersException.class,
+                () -> {calculatorService.getListNumbersFromFile(text);});
+    }
+
     @Test
     public void getDescendingSequence_shouldReturnMaxDescendingSequence() {
-        StringBuilder stringBuilder = new StringBuilder("12 3 2 4 3 2 14 11 10 2 1");
-        List<Integer> actual = new ArrayList<>(List.of(14, 11, 10, 2, 1));
-        List<Integer> expected = calculatorService.getDescendingSequence(stringBuilder);
+        List<Integer> actual = new ArrayList<>(List.of(13, 11, 1));
+        List<Integer> expected = calculatorService.getDescendingSequence(textFromFile);
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void getAscendingSequence_shouldReturnMaxAscendingSequence() {
-        StringBuilder stringBuilder = new StringBuilder("12 13 15 1 2 3 4 5 6 3 2 4 3 2 14 11 10 2 1");
-        List<Integer> actual = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6));
-        List<Integer> expected = calculatorService.getAscendingSequence(stringBuilder);
+        List<Integer> actual = new ArrayList<>(List.of(12, 13));
+        List<Integer> expected = calculatorService.getAscendingSequence(textFromFile);
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void getMax_shouldReturnMaxValue() {
-        StringBuilder stringBuilder = new StringBuilder("12 13 15 1 2 3 4 5 6 3 2 4 3 2 14 11 10 2 1");
-        int actual = 15;
-        int expected = calculatorService.getMaxValue(stringBuilder);
+        int actual = 13;
+        int expected = calculatorService.getMaxValue(textFromFile);
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void getMin_shouldReturnMinValue() {
-        StringBuilder stringBuilder = new StringBuilder("12 -13 15 1 2 3 4 5 6 3 2 4 3 2 14 11 10 2 1");
-        int actual = -13;
-        int expected = calculatorService.getMinValue(stringBuilder);
+        int actual = -2;
+        int expected = calculatorService.getMinValue(textFromFile);
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void getAverage_shouldReturnAverage() {
-        StringBuilder stringBuilder = new StringBuilder("-10 11 1 -2 4 9 5");
-        double actual = 6.0;
-        double expected = calculatorService.getAverage(stringBuilder);
+        double actual = 7.0;
+        double expected = calculatorService.getAverage(textFromFile);
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void getMedian_shouldReturnMedian() {
-        StringBuilder stringBuilder = new StringBuilder("12 13 11 1 2 2");
         double actual = 6.0;
-        double expected = calculatorService.getMedian(stringBuilder);
+        double expected = calculatorService.getMedian(textFromFile);
 
         Assertions.assertEquals(expected, actual);
     }
