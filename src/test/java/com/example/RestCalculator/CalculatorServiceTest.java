@@ -1,5 +1,6 @@
 package com.example.RestCalculator;
 
+import com.example.RestCalculator.exceptions.FileIsEmptyException;
 import com.example.RestCalculator.exceptions.FileNotFoundNumbersException;
 import com.example.RestCalculator.service.CalculatorService;
 import org.junit.jupiter.api.Assertions;
@@ -7,7 +8,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +24,25 @@ public class CalculatorServiceTest {
     private CalculatorService calculatorService;
 
     private static StringBuilder textFromFile;
-    private static List<Integer> actual;
 
     @BeforeAll
     public static void setUp() {
         textFromFile = new StringBuilder("test12test test13 11test 1 3 -2");
+    }
+
+    @Test
+    public void getStringFromFile_shouldReturnAllTextFromFile() throws IOException {
+        StringBuilder actual = new StringBuilder("test12 test12 test12 test12.");
+        StringBuilder expected = calculatorService.getStringFromFile(new MockMultipartFile("fileForTest", "fileForTest.txt",
+                MediaType.TEXT_PLAIN_VALUE, "test12 test12 test12 test12.".getBytes()));
+        Assertions.assertEquals(expected.toString().trim(), actual.toString().trim());
+    }
+
+    @Test
+    public void getStringFromFile_shouldTrowFileNotFoundNumbersException() {
+        assertThrows(FileIsEmptyException.class,
+                () -> {calculatorService.getStringFromFile(new MockMultipartFile("fileForTest", "fileForTest.txt",
+                        MediaType.TEXT_PLAIN_VALUE, "".getBytes()));});
     }
 
     @Test
@@ -59,7 +77,7 @@ public class CalculatorServiceTest {
     }
 
     @Test
-    public void getMax_shouldReturnMaxValue() {
+    public void getMax_shouldReturnMaxValue() throws InterruptedException {
         int actual = 13;
         int expected = calculatorService.getMaxValue(textFromFile);
 

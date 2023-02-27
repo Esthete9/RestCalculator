@@ -1,52 +1,96 @@
 package com.example.RestCalculator.service;
 
-
+import com.example.RestCalculator.exceptions.FileIsEmptyException;
 import com.example.RestCalculator.exceptions.FileNotFoundNumbersException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service("CalculatorService")
 public class CalculatorService {
 
-    public CalculatorService() {
+    @Value("${FileNotFoundNumbersException}")
+    private String fileNotFoundNumbersExceptionMsg;
+
+    @Value("${FileIsEmptyExceptionMessage}")
+    private String fileIsEmptyExceptionMsg;
+
+    public int getInt(List<Integer> list) throws InterruptedException, IOException {
+        TimeUnit.SECONDS.sleep(3L);
+       return 1;
     }
 
+    @Cacheable("getStringFromFile")
+    public StringBuilder getStringFromFile(MultipartFile file) throws IOException {
+        Path uploadPath = Paths.get("file.txt");
+        StringBuilder textFromFile = new StringBuilder();
+        if (file != null) {
+            if (!Files.exists(uploadPath)) {
+                Files.createFile(uploadPath);
+            }
+            file.transferTo(uploadPath);
+            List<String> lines = Files.readAllLines(uploadPath);
+            for (var line : lines) {
+                textFromFile.append(line + "\n");
+            }
+        }
+        if (textFromFile.toString().isEmpty() || textFromFile.toString().isBlank())
+            throw new FileIsEmptyException(fileIsEmptyExceptionMsg);
+        else
+            return textFromFile;
+    }
+
+    @Cacheable("getStringFromByteArr")
+    public StringBuilder getStringFromByteArr(byte[] bytes) {
+        return new StringBuilder(new String(bytes, StandardCharsets.UTF_8));
+    }
+
+    @Cacheable("getListNumbersFromFile")
     public List<Integer> getListNumbersFromFile(StringBuilder textFromFile) {
         Pattern pattern = Pattern.compile("-\\d+|\\d+");
         Matcher matcher = pattern.matcher(textFromFile);
-        String res = "";
+        StringBuilder res = new StringBuilder();
 
         while (matcher.find()) {
-            res += matcher.group() + " ";
+            res.append(matcher.group() + " ");
         }
 
-        if (res.isEmpty()) {
-            throw new FileNotFoundNumbersException("В переданном файле нет чисел!");
+        if (res.toString().isEmpty()) {
+            throw new FileNotFoundNumbersException(fileNotFoundNumbersExceptionMsg);
         }
 
-        String[] strArr = res.split(" ");
+        String[] strArr = res.toString().split(" ");
 
         List<Integer> integerList = new ArrayList<>();
-
         for (var str : strArr) {
            integerList.add(Integer.parseInt(str));
         }
+
         return integerList;
     }
-
-    public int getMaxValue(StringBuilder stringBuilder) {
+    @Cacheable("getMaxValue")
+    public int getMaxValue(StringBuilder stringBuilder)  {
         return getListNumbersFromFile(stringBuilder).stream().max(Comparator.naturalOrder()).get();
     }
-
+    @Cacheable("getMinValue")
     public int getMinValue(StringBuilder stringBuilder) {
         return getListNumbersFromFile(stringBuilder).stream().min(Comparator.naturalOrder()).get();
     }
-
+    @Cacheable("getMedian")
     public double getMedian(StringBuilder stringBuilder) {
         double median;
         List<Integer> numbers = getListNumbersFromFile(stringBuilder);
@@ -57,6 +101,7 @@ public class CalculatorService {
             return median;
     }
 
+    @Cacheable("getAverage")
     public double getAverage(StringBuilder stringBuilder) {
         double sum = 0;
         for (var val : getListNumbersFromFile(stringBuilder)) {
@@ -68,6 +113,7 @@ public class CalculatorService {
         return sum / getListNumbersFromFile(stringBuilder).size();
     }
 
+    @Cacheable("getDescendingSequence")
     public List<Integer> getDescendingSequence(StringBuilder stringBuilder) {
         List<Integer> numbers = getListNumbersFromFile(stringBuilder);
 
@@ -97,6 +143,7 @@ public class CalculatorService {
         return getSequence(startIndex, endIndex, numbers);
     }
 
+    @Cacheable("getAscendingSequence")
     public List<Integer> getAscendingSequence(StringBuilder stringBuilder) {
         List<Integer> numbers = getListNumbersFromFile(stringBuilder);
 
