@@ -23,19 +23,19 @@ public class CalculatorServiceTest {
     @Autowired
     private CalculatorService calculatorService;
 
-    private static StringBuilder textFromFile;
+    private static String textFromFile;
 
     @BeforeAll
     public static void setUp() {
-        textFromFile = new StringBuilder("test12test test13 11test 1 3 -2");
+        textFromFile = "test12test test13 11test 1 3 -2";
     }
 
     @Test
     public void getStringFromFile_shouldReturnAllTextFromFile() throws IOException {
-        StringBuilder actual = new StringBuilder("test12 test12 test12 test12.");
-        StringBuilder expected = calculatorService.getStringFromFile(new MockMultipartFile("fileForTest", "fileForTest.txt",
+        String actual = "test12 test12 test12 test12.";
+        String expected = calculatorService.getStringFromFile(new MockMultipartFile("fileForTest", "fileForTest.txt",
                 MediaType.TEXT_PLAIN_VALUE, "test12 test12 test12 test12.".getBytes()));
-        Assertions.assertEquals(expected.toString().trim(), actual.toString().trim());
+        Assertions.assertEquals(expected.trim(), actual.trim());
     }
 
     @Test
@@ -48,16 +48,16 @@ public class CalculatorServiceTest {
     @Test
     public void getListNumbersFromFile_shouldReturnListNumbers() {
         List<Integer> actual = new ArrayList<>(List.of(12, 13, 11, 1, 3, -2));
-        List<Integer> expected = calculatorService.getListNumbersFromFile(textFromFile);
+        List<Integer> expected = calculatorService.getListNumbersFromFileText(textFromFile);
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void getListNumbersFromFile_shouldTrowException() {
-        StringBuilder text = new StringBuilder("test");
+        String text = "test";
         assertThrows(FileNotFoundNumbersException.class,
-                () -> {calculatorService.getListNumbersFromFile(text);});
+                () -> {calculatorService.getListNumbersFromFileText(text);});
     }
 
     @Test

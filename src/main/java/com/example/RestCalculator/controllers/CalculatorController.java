@@ -34,21 +34,21 @@ public class CalculatorController {
 
     @ApiOperation("Возвращает максимальное число в файле или файле бинарного вида")
     @PostMapping("/max")
-    public int getMaxNumberInFile(@RequestParam("file") MultipartFile file) throws IOException, InterruptedException {
+    public int getMaxNumberInFile(@RequestParam("file") MultipartFile file) throws IOException {
         if (file != null) return calculatorService.getMaxValue(calculatorService.getStringFromFile(file));
         else throw new NullPointerFileException("Файл не был доставлен!");
     }
 
     @ApiOperation("Возвращает минимальное число в файле или файле бинарного вида")
     @PostMapping("/min")
-    public int getMinNumberInFile(@RequestParam("file") MultipartFile file) throws IOException, InterruptedException {
+    public int getMinNumberInFile(@RequestParam("file") MultipartFile file) throws IOException {
         if (file != null) return calculatorService.getMinValue(calculatorService.getStringFromFile(file));
         else throw new NullPointerFileException(nullPointerFileExceptionMsg);
     }
 
     @ApiOperation("Возвращает медиану среди чисел в файле или файле бинарного вида")
     @PostMapping("/median")
-    public double getMedian(@RequestParam("file") MultipartFile file) throws IOException, InterruptedException {
+    public double getMedian(@RequestParam("file") MultipartFile file) throws IOException {
         if (file != null) return calculatorService.getMedian(calculatorService.getStringFromFile(file));
         else throw new NullPointerFileException(nullPointerFileExceptionMsg);
     }
@@ -69,49 +69,49 @@ public class CalculatorController {
 
     @ApiOperation("Возвращает самую длинную возрастающую последовательность среди чисел в файле или файле бинарного вида")
     @PostMapping("/descending")
-    public List<Integer> getDescendingSequence(@RequestParam("file") MultipartFile file) throws IOException, InterruptedException {
+    public List<Integer> getDescendingSequence(@RequestParam("file") MultipartFile file) throws IOException {
         if (file != null) return calculatorService.getDescendingSequence(calculatorService.getStringFromFile(file));
         else throw new NullPointerFileException(nullPointerFileExceptionMsg);
     }
 
     @ApiOperation("Возвращает максимальное число файле бинарного вида")
     @PostMapping("/binaryMax")
-    public int getMaxNumberInFile(@RequestBody byte[] bytes) throws InterruptedException {
+    public int getMaxNumberInFile(@RequestBody byte[] bytes) {
         if (bytes != null) return calculatorService.getMaxValue(calculatorService.getStringFromByteArr(bytes));
         else throw new NullPointerFileException(nullPointerFileExceptionMsg);
     }
 
     @ApiOperation("Возвращает минимальное число в файле бинарного вида")
     @PostMapping("/binaryMin")
-    public int getMinNumberInFile(@RequestBody byte[] bytes) throws InterruptedException {
+    public int getMinNumberInFile(@RequestBody byte[] bytes) {
         if (bytes != null) return calculatorService.getMinValue(calculatorService.getStringFromByteArr(bytes));
         else throw new NullPointerFileException(nullPointerFileExceptionMsg);
     }
 
     @ApiOperation("Возвращает медиану среди чисел в файле бинарного вида")
     @PostMapping("/binaryMedian")
-    public double getMedian(@RequestBody byte[] bytes) throws InterruptedException {
+    public double getMedian(@RequestBody byte[] bytes) {
         if (bytes != null) return calculatorService.getMedian(calculatorService.getStringFromByteArr(bytes));
         else throw new NullPointerFileException(nullPointerFileExceptionMsg);
     }
 
     @ApiOperation("Возвращает среднее арифметическое значение среди чисел в файле бинарного вида")
     @PostMapping("/binaryAverage")
-    public double getAverage(@RequestBody byte[] bytes) throws InterruptedException {
+    public double getAverage(@RequestBody byte[] bytes) {
         if (bytes != null) return calculatorService.getAverage(calculatorService.getStringFromByteArr(bytes));
         else throw new NullPointerFileException(nullPointerFileExceptionMsg);
     }
 
     @ApiOperation("Возвращает самую длинную убывающую последовательность среди чисел в файле бинарного вида")
     @PostMapping("/binaryAscending")
-    public List<Integer> getAscendingSequence(@RequestBody byte[] bytes) throws InterruptedException {
+    public List<Integer> getAscendingSequence(@RequestBody byte[] bytes) {
         if (bytes != null) return calculatorService.getAscendingSequence(calculatorService.getStringFromByteArr(bytes));
         else throw new NullPointerFileException(nullPointerFileExceptionMsg);
     }
 
     @ApiOperation("Возвращает самую длинную возрастающую последовательность среди чисел в файле бинарного вида")
     @PostMapping("/binaryDescending")
-    public List<Integer> getDescendingSequence(@RequestBody byte[] bytes) throws InterruptedException {
+    public List<Integer> getDescendingSequence(@RequestBody byte[] bytes) {
         if (bytes != null) return calculatorService.getDescendingSequence(calculatorService.getStringFromByteArr(bytes));
         else throw new NullPointerFileException(nullPointerFileExceptionMsg);
     }
