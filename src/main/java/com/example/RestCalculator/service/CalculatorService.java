@@ -3,7 +3,6 @@ package com.example.RestCalculator.service;
 import com.example.RestCalculator.exceptions.FileIsEmptyException;
 import com.example.RestCalculator.exceptions.FileNotFoundNumbersException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +15,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,11 +26,6 @@ public class CalculatorService {
 
     @Value("${FileIsEmptyExceptionMessage}")
     private String fileIsEmptyExceptionMsg;
-
-    public int getInt(List<Integer> list) throws InterruptedException, IOException {
-        TimeUnit.SECONDS.sleep(3L);
-       return 1;
-    }
 
     @Cacheable("getStringFromFile")
     public StringBuilder getStringFromFile(MultipartFile file) throws IOException {

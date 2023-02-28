@@ -32,12 +32,6 @@ public class CalculatorController {
         this.calculatorService = calculatorService;
     }
 
-    @PostMapping("/getInt")
-    public int getInt(@RequestBody List<Integer> file) throws InterruptedException, IOException {
-        int i = calculatorService.getInt(file);
-        return i;
-    }
-
     @ApiOperation("Возвращает максимальное число в файле или файле бинарного вида")
     @PostMapping("/max")
     public int getMaxNumberInFile(@RequestParam("file") MultipartFile file) throws IOException, InterruptedException {
