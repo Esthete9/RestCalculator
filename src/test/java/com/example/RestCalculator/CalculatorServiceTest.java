@@ -27,7 +27,7 @@ public class CalculatorServiceTest {
 
     @BeforeAll
     public static void setUp() {
-        textFromFile = "test12test test13 11test 1 3 -2";
+        textFromFile = "test12test test13 11test 1 3 -2 -3 5";
     }
 
     @Test
@@ -47,7 +47,7 @@ public class CalculatorServiceTest {
 
     @Test
     public void getListNumbersFromFile_shouldReturnListNumbers() {
-        List<Integer> actual = new ArrayList<>(List.of(12, 13, 11, 1, 3, -2));
+        List<Integer> actual = new ArrayList<>(List.of(12, 13, 11, 1, 3, -2, -3, 5));
         List<Integer> expected = calculatorService.getListNumbersFromFileText(textFromFile);
 
         Assertions.assertEquals(expected, actual);
@@ -62,16 +62,28 @@ public class CalculatorServiceTest {
 
     @Test
     public void getDescendingSequence_shouldReturnMaxDescendingSequence() {
-        List<Integer> actual = new ArrayList<>(List.of(13, 11, 1));
-        List<Integer> expected = calculatorService.getDescendingSequence(textFromFile);
+        List<List<Integer>> actual = new ArrayList<>(List.of(new ArrayList<>(List.of(13, 11, 1)), new ArrayList<>(List.of(3, -2, -3))));
+        List<List<Integer>> expected = calculatorService.getDescendingSequence(textFromFile);
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void getAscendingSequence_shouldReturnMaxAscendingSequence() {
-        List<Integer> actual = new ArrayList<>(List.of(12, 13));
-        List<Integer> expected = calculatorService.getAscendingSequence(textFromFile);
+        List<List<Integer>> actual = new ArrayList<>(List.of(new ArrayList<>(List.of(12, 13)), new ArrayList<>(List.of(1, 3)),
+                new ArrayList<>(List.of(-3, 5))));
+        List<List<Integer>> expected = calculatorService.getAscendingSequence(textFromFile);
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getLongestSequences_shouldReturnLongestSequences() {
+        List<List<Integer>> test = new ArrayList<>(List.of(new ArrayList<>(List.of(12, 13)), new ArrayList<>(List.of(1, 3)),
+                new ArrayList<>(List.of(-3))));
+        List<List<Integer>> actual = new ArrayList<>(List.of(new ArrayList<>(List.of(12, 13)), new ArrayList<>(List.of(1, 3))));
+
+        List<List<Integer>> expected = calculatorService.getLongestSequences(test);
 
         Assertions.assertEquals(expected, actual);
     }
@@ -86,7 +98,7 @@ public class CalculatorServiceTest {
 
     @Test
     public void getMin_shouldReturnMinValue() {
-        int actual = -2;
+        int actual = -3;
         int expected = calculatorService.getMinValue(textFromFile);
 
         Assertions.assertEquals(expected, actual);
@@ -94,7 +106,7 @@ public class CalculatorServiceTest {
 
     @Test
     public void getAverage_shouldReturnAverage() {
-        double actual = 7.0;
+        double actual = 5.0;
         double expected = calculatorService.getAverage(textFromFile);
 
         Assertions.assertEquals(expected, actual);
@@ -102,7 +114,7 @@ public class CalculatorServiceTest {
 
     @Test
     public void getMedian_shouldReturnMedian() {
-        double actual = 6.0;
+        double actual = 2.0;
         double expected = calculatorService.getMedian(textFromFile);
 
         Assertions.assertEquals(expected, actual);

@@ -17,6 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class CalculatorServiceImpl implements CalculatorService {
@@ -101,79 +102,62 @@ public class CalculatorServiceImpl implements CalculatorService {
     public double getAverage(String text) {
         double sum = 0;
         for (var val : getListNumbersFromFileText(text)) {
-            if (val < 0)
-                sum += Math.abs(val);
-            else
-                sum += val;
+            sum += val;
         }
         return sum / getListNumbersFromFileText(text).size();
     }
 
     @Override
-    public List<Integer> getDescendingSequence(String text) {
+    public List<List<Integer>> getDescendingSequence(String text) {
         List<Integer> numbers = getListNumbersFromFileText(text);
+        List<List<Integer>> descendingSequences = new ArrayList<>();
 
-        int currentCount = 0;
-        int nextCount = 0;
-        int startIndex = 0;
-        int endIndex = 0;
-        int tempStartInd;
-
+        int listIndex = 0;
         for (int i = 0; i < numbers.size() - 1; i++) {
-            tempStartInd = i;
+            descendingSequences.add(new ArrayList<>());
             while (numbers.get(i) > numbers.get(i + 1)) {
-                nextCount++;
+                descendingSequences.get(listIndex).add(numbers.get(i));
                 i++;
                 if (numbers.size() - 1 == i) {
                     break;
                 }
             }
-            if (nextCount > currentCount) {
-                startIndex = tempStartInd;
-                currentCount = nextCount;
-                endIndex = i;
-            }
-            nextCount = 0;
+            descendingSequences.get(listIndex).add(numbers.get(i));
+            listIndex++;
         }
 
-        return getSequence(startIndex, endIndex, numbers);
+        return getLongestSequences(descendingSequences);
     }
 
     @Override
-    public List<Integer> getAscendingSequence(String text) {
+    public List<List<Integer>> getLongestSequences(List<List<Integer>> sequences) {
+        int maxSize = sequences.stream().max((o1, o2) -> {
+            if (o1.size() > o2.size()) return 1;
+            else if (o1.size() < o2.size()) return -1;
+            else return 0;}).get().size();
+
+        return sequences.stream().filter(a -> a.size() == maxSize).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<List<Integer>> getAscendingSequence(String text) {
         List<Integer> numbers = getListNumbersFromFileText(text);
+        List<List<Integer>> ascendingSequences = new ArrayList<>();
 
-        int currentCount = 0;
-        int nextCount = 0;
-        int startIndex = 0;
-        int endIndex = 0;
-        int tempStartInd;
-
+        int listIndex = 0;
         for (int i = 0; i < numbers.size() - 1; i++) {
-            tempStartInd = i;
+            ascendingSequences.add(new ArrayList<>());
             while (numbers.get(i) < numbers.get(i + 1)) {
-                nextCount++;
+                ascendingSequences.get(listIndex).add(numbers.get(i));
                 i++;
                 if (numbers.size() - 1 == i) {
                     break;
                 }
             }
-            if (nextCount > currentCount) {
-                startIndex = tempStartInd;
-                currentCount = nextCount;
-                endIndex = i;
-            }
-            nextCount = 0;
+            ascendingSequences.get(listIndex).add(numbers.get(i));
+            listIndex++;
         }
 
-        return getSequence(startIndex, endIndex, numbers);
-    }
-
-    private List<Integer> getSequence(int startIndex, int endIndex, List<Integer> numbers) {
-        List<Integer> descendingSequence = new ArrayList<>();
-        for (int i = startIndex; i <= endIndex; i++) {
-            descendingSequence.add(numbers.get(i));
-        }
-        return descendingSequence;
+        return getLongestSequences(ascendingSequences);
     }
 }

@@ -62,14 +62,14 @@ public class CalculatorController {
 
     @ApiOperation("Возвращает самую длинную убывающую последовательность среди чисел в файле или файле бинарного вида")
     @PostMapping("/ascending")
-    public List<Integer> getAscendingSequence(@RequestParam("file") MultipartFile file) throws IOException, InterruptedException {
+    public List<List<Integer>> getAscendingSequence(@RequestParam("file") MultipartFile file) throws IOException, InterruptedException {
         if (file != null) return calculatorService.getAscendingSequence(calculatorService.getStringFromFile(file));
         else throw new NullPointerFileException(nullPointerFileExceptionMsg);
     }
 
     @ApiOperation("Возвращает самую длинную возрастающую последовательность среди чисел в файле или файле бинарного вида")
     @PostMapping("/descending")
-    public List<Integer> getDescendingSequence(@RequestParam("file") MultipartFile file) throws IOException {
+    public List<List<Integer>> getDescendingSequence(@RequestParam("file") MultipartFile file) throws IOException {
         if (file != null) return calculatorService.getDescendingSequence(calculatorService.getStringFromFile(file));
         else throw new NullPointerFileException(nullPointerFileExceptionMsg);
     }
@@ -104,14 +104,14 @@ public class CalculatorController {
 
     @ApiOperation("Возвращает самую длинную убывающую последовательность среди чисел в файле бинарного вида")
     @PostMapping("/binaryAscending")
-    public List<Integer> getAscendingSequence(@RequestBody byte[] bytes) {
+    public List<List<Integer>> getAscendingSequence(@RequestBody byte[] bytes) {
         if (bytes != null) return calculatorService.getAscendingSequence(calculatorService.getStringFromByteArr(bytes));
         else throw new NullPointerFileException(nullPointerFileExceptionMsg);
     }
 
     @ApiOperation("Возвращает самую длинную возрастающую последовательность среди чисел в файле бинарного вида")
     @PostMapping("/binaryDescending")
-    public List<Integer> getDescendingSequence(@RequestBody byte[] bytes) {
+    public List<List<Integer>> getDescendingSequence(@RequestBody byte[] bytes) {
         if (bytes != null) return calculatorService.getDescendingSequence(calculatorService.getStringFromByteArr(bytes));
         else throw new NullPointerFileException(nullPointerFileExceptionMsg);
     }

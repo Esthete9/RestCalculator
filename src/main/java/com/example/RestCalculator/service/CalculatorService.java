@@ -15,6 +15,7 @@ public interface CalculatorService {
     public int getMinValue(String text);
     public double getMedian(String text);
     public double getAverage(String text);
-    public List<Integer> getDescendingSequence(String text);
-    public List<Integer> getAscendingSequence(String text);
+    public List<List<Integer>> getDescendingSequence(String text);
+    public List<List<Integer>> getAscendingSequence(String text);
+    public List<List<Integer>> getLongestSequences(List<List<Integer>> sequences);
 }
