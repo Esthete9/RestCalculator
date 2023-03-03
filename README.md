@@ -51,6 +51,7 @@ accept:application/json или accept:application/xml к HTTP-заросу.
 `23423424`
 
 #### Пример запроса 
+
 ![request.png](images/request.png)
 
 #### Пример ответа:
