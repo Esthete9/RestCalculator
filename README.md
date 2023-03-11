@@ -37,7 +37,7 @@ accept:application/json или accept:application/xml к HTTP-запросу.
 
 `git clone https://github.com/Esthete9/RestCalculator.git`
 
-далее перейти в корневую папку проекта и выполнить команду -
+далее перейти в корневую директорию проекта и выполнить команду -
 
 `mvn spring-boot:run`
 
@@ -60,7 +60,7 @@ accept:application/json или accept:application/xml к HTTP-запросу.
 `POST api/max` 
 ### Возвращает максимальное число в файле.
 В случае размещения приложения на порте 8080, запрос будет выглядеть:
-**localhost:8080/api/max** - все остальные запросы строятся аналагично.
+**localhost:8080/api/max** - все остальные запросы строятся аналогично.
 #### Параметры:
 `file: Multipart` - Переданный файл, в котором будет вестись поиск.
 #### Ответ:
